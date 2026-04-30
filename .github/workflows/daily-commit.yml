@@ -1,4 +1,4 @@
-name: Daily GitHub Activity
+name: Random GitHub Activity
 
 on:
   schedule:
@@ -10,17 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Update activity log
-        run: |
-          echo "Activity on $(date)" >> activity.log
-
-      - name: Commit changes
+      - name: Generate random commits
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add activity.log
-          git commit -m "Daily activity $(date)" || exit 0
+
+          COUNT=$(( (RANDOM % 20) + 1 ))
+
+          echo "Creating $COUNT commits"
+
+          for i in $(seq 1 $COUNT)
+          do
+            echo "Activity $i on $(date)" >> activity.log
+            git add activity.log
+            git commit -m "Random activity $i $(date)"
+          done
+
+      - name: Push
+        run: |
           git push
