@@ -13,8 +13,8 @@ jobs:
       - name: Create random activity
         run: |
           echo "$(date): Random activity from GitHub Actions" >> activity.log
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions@github.com"
+          git config user.email "alirezanaseri548@users.noreply.github.com"
+          git config user.name "alirezanaseri548"
           git add activity.log
           git commit -m "Random update from GitHub Actions"
           git push
