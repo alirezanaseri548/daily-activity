@@ -1,34 +1,20 @@
 name: Random GitHub Activity
 
 on:
-  schedule:
-    - cron: "0 5 * * *"
   workflow_dispatch:
+  schedule:
+    - cron: "0 1 * * *"
 
 jobs:
-  commit:
+  random-activity:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Generate random commits
+      - uses: actions/checkout@v4
+      - name: Create random activity
         run: |
+          echo "$(date): Random activity from GitHub Actions" >> activity.log
           git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-          COUNT=$(( (RANDOM % 20) + 1 ))
-
-          echo "Creating $COUNT commits"
-
-          for i in $(seq 1 $COUNT)
-          do
-            echo "Activity $i on $(date)" >> activity.log
-            git add activity.log
-            git commit -m "Random activity $i $(date)"
-          done
-
-      - name: Push
-        run: |
+          git config user.email "github-actions@github.com"
+          git add activity.log
+          git commit -m "Random update from GitHub Actions"
           git push
