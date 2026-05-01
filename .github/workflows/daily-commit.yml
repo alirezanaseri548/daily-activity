@@ -1,20 +1,36 @@
-name: Random GitHub Activity
+name: Daily Commit
 
 on:
-  workflow_dispatch:
   schedule:
-    - cron: "0 1 * * *"
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  random-activity:
+  daily-commit:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Create random activity
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure Git
         run: |
-          echo "$(date): Random activity from GitHub Actions" >> activity.log
-          git config user.email "alirezanaseri548@users.noreply.github.com"
-          git config user.name "alirezanaseri548"
-          git add activity.log
-          git commit -m "Random update from GitHub Actions"
-          git push
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Make daily update
+        run: |
+          echo "Last update: $(date -u)" > activity-log.txt
+
+      - name: Commit changes if needed
+        run: |
+          git add .
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: daily automated update"
+            git push origin HEAD:main
+          fi
