@@ -1,15 +1,16 @@
-name: Daily Commit
+name: Hourly Commit
 
 on:
   schedule:
-    - cron: "0 8 * * *"
-  workflow_dispatch:
+    # اجرا هر ساعت در دقیقه 0
+    - cron: "0 * * * *"
+  workflow_dispatch:  # اجرای دستی هم مجاز است
 
 permissions:
   contents: write
 
 jobs:
-  daily-commit:
+  hourly-commit:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,7 +22,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-      - name: Make daily update
+      - name: Make hourly update
         run: |
           echo "Last update: $(date -u)" > activity-log.txt
 
@@ -31,6 +32,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "chore: daily automated update"
+            git commit -m "chore: hourly automated update"
             git push origin HEAD:main
           fi
