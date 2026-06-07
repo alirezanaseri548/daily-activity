@@ -1,10 +1,9 @@
-name: Hourly Commit
+name: Hourly Activity
 
 on:
   schedule:
-    # اجرا هر ساعت در دقیقه 0
     - cron: "0 * * * *"
-  workflow_dispatch:  # اجرای دستی هم مجاز است
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -15,23 +14,23 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        uses: actions/checkout@v4
 
       - name: Configure Git
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "alirezanaseri548"
+          git config user.email "alirezanaseri369@gmail.com"
 
-      - name: Make hourly update
+      - name: Update activity log
         run: |
-          echo "Last update: $(date -u)" > activity-log.txt
+          echo "Activity at $(date -u)" >> activity-log.txt
 
-      - name: Commit changes if needed
+      - name: Commit and Push
         run: |
-          git add .
+          git add activity-log.txt
           if git diff --cached --quiet; then
-            echo "No changes to commit."
+            echo "No changes to commit"
           else
-            git commit -m "chore: hourly automated update"
-            git push origin HEAD:main
+            git commit -m "chore: automated activity $(date -u)"
+            git push
           fi
