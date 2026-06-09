@@ -1,4 +1,4 @@
-name: Hourly Activity
+name: Every 5 Minutes Activity
 
 on:
   schedule:
@@ -9,12 +9,12 @@ permissions:
   contents: write
 
 jobs:
-  hourly-commit:
+  auto-commit:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        uses: actions/checkout@v4
 
       - name: Configure Git
         run: |
@@ -25,12 +25,8 @@ jobs:
         run: |
           echo "Activity at $(date -u)" >> activity-log.txt
 
-      - name: Commit and Push
+      - name: Commit and push
         run: |
           git add activity-log.txt
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "chore: automated activity $(date -u)"
-            git push origin HEAD:main
-          fi
+          git commit -m "chore: automated activity $(date -u)" || echo "Nothing to commit"
+          git push
