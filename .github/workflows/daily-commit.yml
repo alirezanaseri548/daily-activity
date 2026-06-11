@@ -23,10 +23,17 @@ jobs:
           persist-credentials: true
           fetch-depth: 0
 
+      - name: Debug trigger
+        run: |
+          echo "event_name=${{ github.event_name }}"
+          echo "ref=${{ github.ref }}"
+          echo "sha=${{ github.sha }}"
+          echo "time=$(date -u '+%Y-%m-%d %H:%M:%S UTC')"
+
       - name: Configure Git
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git config user.name "alirezanaseri548"
+          git config user.email "alirezanaseri369@gmail.com"
 
       - name: Update activity log
         run: |
