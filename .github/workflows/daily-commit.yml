@@ -1,12 +1,16 @@
-name: Every 5 Minutes Activity
+name: Every 15 Minutes Activity
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "*/15 * * * *"
   workflow_dispatch:
 
 permissions:
   contents: write
+
+concurrency:
+  group: activity-commit
+  cancel-in-progress: false
 
 jobs:
   auto-commit:
@@ -14,23 +18,31 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+          fetch-depth: 0
 
       - name: Configure Git
         run: |
           git config user.name "alirezanaseri548"
           git config user.email "alirezanaseri369@gmail.com"
 
+      - name: Sync with main
+        run: |
+          git pull origin main --rebase
+
       - name: Update activity log
         run: |
-          echo "Activity at $(date -u)" >> activity-log.txt
+          echo "Activity at $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> activity-log.txt
 
       - name: Commit and Push
         run: |
           git add activity-log.txt
+
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "chore: automated activity $(date -u)"
+            git commit -m "chore: automated activity $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
             git push origin HEAD:main
           fi
