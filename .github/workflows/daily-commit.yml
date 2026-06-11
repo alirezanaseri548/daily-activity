@@ -18,19 +18,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
+        uses: actions/checkout@v4
         with:
           persist-credentials: true
           fetch-depth: 0
 
       - name: Configure Git
         run: |
-          git config user.name "alirezanaseri548"
-          git config user.email "alirezanaseri369@gmail.com"
-
-      - name: Sync with main
-        run: |
-          git pull origin main --rebase
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Update activity log
         run: |
@@ -43,5 +39,5 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "chore: automated activity $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-            git push origin HEAD:main
+            git push
           fi
