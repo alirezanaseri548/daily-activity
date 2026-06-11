@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11
         with:
           persist-credentials: true
           fetch-depth: 0
@@ -39,5 +39,5 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "chore: automated activity $(date -u '+%Y-%m-%d %H:%M:%S UTC')"
-            git push
+            git push origin HEAD:main
           fi
